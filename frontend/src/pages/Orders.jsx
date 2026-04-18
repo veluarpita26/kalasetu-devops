@@ -4,6 +4,7 @@ import * as ordersAPI from "../api/orderApi";
 import OrderStatusBadge from "../components/OrderStatusBadge";
 import Loader from "../components/Loader";
 
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -131,7 +132,7 @@ const Orders = () => {
                     item.product?.images?.[0] &&
                     (item.product.images[0].startsWith("http")
                       ? item.product.images[0]
-                      : `http://localhost:5000/uploads/${item.product.images[0]}`);
+                      : `${BASE_URL}/uploads/${item.product.images[0]}`);
 
                   return (
                     <div key={i} style={{

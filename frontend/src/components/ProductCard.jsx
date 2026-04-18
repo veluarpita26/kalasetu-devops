@@ -2,6 +2,7 @@ import React from "react";
 import { useCart } from "../context/CartContext";
 import toast from "react-hot-toast";
 
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
 
@@ -10,7 +11,7 @@ const ProductCard = ({ product }) => {
     product?.images?.[0] &&
     (product.images[0].startsWith("http")
       ? product.images[0]
-      : `http://localhost:5000/uploads/${product.images[0]}`);
+      : `${BASE_URL}/uploads/${product.images[0]}`);
 
   // ✅ FIXED FUNCTION
   const handleAddToCart = async () => {
@@ -55,9 +56,7 @@ const ProductCard = ({ product }) => {
 
       {/* CONTENT */}
       <div style={{ padding: 12 }}>
-        <p style={{ color: "#7c3aed", fontSize: 12 }}>
-          {product.category}
-        </p>
+        <p style={{ color: "#7c3aed", fontSize: 12 }}>{product.category}</p>
 
         <h3 style={{ margin: "4px 0" }}>{product.name}</h3>
 
@@ -65,9 +64,7 @@ const ProductCard = ({ product }) => {
           by {product.artisan?.name || "Unknown"}
         </p>
 
-        <h4 style={{ color: "#7c3aed", marginTop: 6 }}>
-          ₹{product.price}
-        </h4>
+        <h4 style={{ color: "#7c3aed", marginTop: 6 }}>₹{product.price}</h4>
 
         {/* 🔥 ADD TO CART BUTTON */}
         <button

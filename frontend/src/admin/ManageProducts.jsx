@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { adminGetAllProducts, adminDeleteProduct } from "../api/adminApi";
 import Loader from "../components/Loader";
 
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 const AdminManageProducts = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -37,7 +38,14 @@ const AdminManageProducts = () => {
 
   return (
     <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 5vw" }}>
-      <h1 style={{ fontSize: 24, fontWeight: 800, color: "#1f1f2e", marginBottom: 24 }}>
+      <h1
+        style={{
+          fontSize: 24,
+          fontWeight: 800,
+          color: "#1f1f2e",
+          marginBottom: 24,
+        }}
+      >
         🎨 Manage Products
       </h1>
 
@@ -46,23 +54,27 @@ const AdminManageProducts = () => {
           No products found.
         </p>
       ) : (
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill,minmax(240px,1fr))",
-          gap: 18
-        }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill,minmax(240px,1fr))",
+            gap: 18,
+          }}
+        >
           {products.map((p) => (
-            <div key={p._id} style={{
-              background: "#fff",
-              border: "1px solid #ede9fe",
-              borderRadius: 14,
-              overflow: "hidden"
-            }}>
-              
+            <div
+              key={p._id}
+              style={{
+                background: "#fff",
+                border: "1px solid #ede9fe",
+                borderRadius: 14,
+                overflow: "hidden",
+              }}
+            >
               <img
                 src={
                   p.images?.[0]
-                    ? `http://localhost:5000/uploads/${p.images[0]}`
+                    ? `${BASE_URL}/uploads/${p.images[0]}`
                     : "https://placehold.co/300x160?text=IMG"
                 }
                 alt={p.name}
@@ -70,9 +82,7 @@ const AdminManageProducts = () => {
               />
 
               <div style={{ padding: "12px 14px" }}>
-                <h3 style={{ fontSize: 14, fontWeight: 700 }}>
-                  {p.name}
-                </h3>
+                <h3 style={{ fontSize: 14, fontWeight: 700 }}>{p.name}</h3>
 
                 <p style={{ fontSize: 13, color: "#7c3aed", fontWeight: 700 }}>
                   ₹{p.price?.toLocaleString("en-IN")}
@@ -92,13 +102,12 @@ const AdminManageProducts = () => {
                     border: "none",
                     borderRadius: 7,
                     fontWeight: 600,
-                    cursor: "pointer"
+                    cursor: "pointer",
                   }}
                 >
                   Delete
                 </button>
               </div>
-
             </div>
           ))}
         </div>

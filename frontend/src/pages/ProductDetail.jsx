@@ -6,6 +6,8 @@ import { useAuth } from "../context/AuthContext";
 import StarRating from "../components/StarRating";
 import Loader from "../components/Loader";
 
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 const ProductDetail = () => {
   const { id } = useParams();
   const { addToCart } = useCart();
@@ -67,6 +69,12 @@ const ProductDetail = () => {
     averageRating,
   } = product;
 
+  // ✅ helper function for image URLs
+  const getImageUrl = (img) =>
+    img?.startsWith("http")
+      ? img
+      : `${BASE_URL}/uploads/${img}`;
+
   return (
     <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 5vw" }}>
       
@@ -84,9 +92,9 @@ const ProductDetail = () => {
           >
             <img
               src={
-                images?.[activeImg]?.startsWith("http")
-                  ? images[activeImg]
-                  : `http://localhost:5000/uploads/${images?.[activeImg]}`
+                images?.[activeImg]
+                  ? getImageUrl(images[activeImg])
+                  : "https://placehold.co/600x400?text=No+Image"
               }
               alt={name}
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
@@ -101,7 +109,7 @@ const ProductDetail = () => {
               {images.map((img, i) => (
                 <img
                   key={i}
-                  src={img}
+                  src={getImageUrl(img)}   // ✅ FIXED HERE
                   alt=""
                   onClick={() => setActiveImg(i)}
                   style={{
@@ -186,15 +194,13 @@ const ProductDetail = () => {
 
           {/* CART */}
           <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
-            <button
-              onClick={() => setQty((q) => Math.max(1, q - 1))}
-            >-</button>
+            <button onClick={() => setQty((q) => Math.max(1, q - 1))}>-</button>
 
             <span>{qty}</span>
 
-            <button
-              onClick={() => setQty((q) => Math.min(stock, q + 1))}
-            >+</button>
+            <button onClick={() => setQty((q) => Math.min(stock, q + 1))}>
+              +
+            </button>
 
             <button
               onClick={handleAddToCart}
@@ -221,7 +227,6 @@ const ProductDetail = () => {
           Review system not implemented yet.
         </p>
       </div>
-
     </div>
   );
 };
