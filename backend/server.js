@@ -16,12 +16,24 @@ connectDB();
 const app = express();
 
 // ─── Core Middleware ───────────────────────────────────────────────────────────
+const allowedOrigins = [process.env.CLIENT_URL, "http://localhost:5173"];
+
 app.use(
   cors({
-    origin: "*", // ✅ FIXED
+    origin: function (origin, callback) {
+      // allow requests with no origin (like Postman)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   }),
 );
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
